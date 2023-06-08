@@ -103,3 +103,60 @@ if __name__ == "__main__":
                           ]
 
         }
+        # DataFrame oluşturma
+        df = pd.DataFrame(data)
+        # Bazı Yerlerde Kullanıldı
+        df.fillna(0, inplace=True)
+
+        # DataFrame'i yazdırma
+        print(df)
+        # B)Şıkkı Tecrübe ve yeni maaşları gruplandırıp yazdırma
+        # "Yeni Maaş" sütunundaki non-numeric karakterleri temizleme
+        df["Yeni Maaş"] = pd.to_numeric(df["Yeni Maaş"], errors="coerce")
+
+        # Gruplandırma ve ortalamaları hesaplama
+        tecrube_ortalamalari = df.groupby("Nesne Değeri")["Tecrübe"].mean()
+        yeni_maas_ortalamalari = df.groupby("Nesne Değeri")["Yeni Maaş"].mean()
+
+        # Sonuçları yazdırma
+        print("Tecrübe Ortalamaları:")
+        print(tecrube_ortalamalari)
+
+        print("\nYeni Maaş Ortalamaları:")
+        print(yeni_maas_ortalamalari, "\n")
+
+        # Maaşı 15000 TL üzerinde olanların toplam sayısını bulma
+        ust_15k_maas = df[df["Yeni Maaş"] > 15000]
+        toplam_sayi = len(ust_15k_maas)
+
+        print("Maaşı 15000 TL üzerinde olanların toplam sayısı:", toplam_sayi, "\n")
+        print("# DataFrame'i yeni maaşa göre küçükten büyüğe sıralama")
+
+        # DataFrame'i yeni maaşa göre küçükten büyüğe sıralama
+        df_sorted = df.sort_values(by="Yeni Maaş")
+
+        # Sıralanmış DataFrame'i yazdırma
+        print(df_sorted)
+
+        # Tecrübesi 3 seneden fazla olan Beyaz yakalıları bulma               E şıkkı
+        beyaz_yakalilar = df[df["Nesne Değeri"] == "Beyaz Yaka"]
+        tecrube_filtre = beyaz_yakalilar["Tecrübe"] > 3
+        beyaz_yaka_yazdirma = beyaz_yakalilar[tecrube_filtre]
+
+        # Sonucu yazdırma
+        print(beyaz_yaka_yazdirma)
+
+        print("\nYeni maaşı 1000 TL üzerinde olan için 2-5 satırları")
+        # Yeni maaşı 10000 TL üzerinde olanların 2-5 satırlarını seçme
+        filtre = df["Yeni Maaş"] > 10000
+        secim = df[filtre].iloc[1:5, [1, 12]]
+
+        # Sonucu yazdırma
+        print(secim, "\n")
+
+        print("Yeni DataFrame Oluşturma")
+        # Yeni DataFrame'i oluşturma
+        yeni_df = df[["Ad", "Soyad", "Sektör", "Yeni Maaş"]]
+
+        # Yeni DataFrame'i yazdırma
+        print(yeni_df)
